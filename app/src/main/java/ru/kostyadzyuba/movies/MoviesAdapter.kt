@@ -28,7 +28,7 @@ class MoviesAdapter(context: Context, private val emptyView: View) :
     }
 
     private val dao: MovieDao
-    var movies: List<Movie>
+    var movies: List<Movie> private set
 
     init {
         val db = Room.databaseBuilder(context, AppDatabase::class.java, "movies")
@@ -36,7 +36,9 @@ class MoviesAdapter(context: Context, private val emptyView: View) :
             .build()
         dao = db.movieDao()
         movies = dao.getAll()
-        if (movies.isNotEmpty()) emptyView.visibility = View.GONE
+
+        if (movies.isEmpty())
+            emptyView.visibility = View.VISIBLE
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
@@ -54,21 +56,26 @@ class MoviesAdapter(context: Context, private val emptyView: View) :
         dao.add(movie)
         (movies as MutableList<Movie>).add(movie)
         notifyItemInserted(movies.size - 1)
-        emptyView.visibility = View.GONE
+        emptyView.visibility = View.INVISIBLE
     }
 
     fun filter(query: String) {
-        val oldList = movies
+        val old = movies
         movies = dao.filter("%$query%")
+
         DiffUtil.calculateDiff(object : DiffUtil.Callback() {
-            override fun getOldListSize() = oldList.size
+            override fun getOldListSize() = old.size
             override fun getNewListSize() = movies.size
 
             override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-                oldList[oldItemPosition].name == movies[newItemPosition].name
+                old[oldItemPosition].name == movies[newItemPosition].name
 
             override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-                oldList[oldItemPosition] == movies[newItemPosition]
+                old[oldItemPosition] == movies[newItemPosition]
         }).dispatchUpdatesTo(this)
+
+        emptyView.visibility =
+            if (movies.isEmpty()) View.VISIBLE
+            else View.INVISIBLE
     }
 }

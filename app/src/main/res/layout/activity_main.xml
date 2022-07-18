@@ -18,8 +18,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:text="После того, как посмотрите фильм, нажмите на плюсик, чтобы добавить его в список."
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5" />
+        android:text="Список просмотренных фильмов пуст"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
+        android:visibility="invisible"
+        tools:visibility="visible" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add"
