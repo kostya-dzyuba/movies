@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import java.time.format.DateTimeFormatter
@@ -26,15 +27,15 @@ class MoviesAdapter(context: Context, private val emptyView: View) :
         }
     }
 
-    private val movieDao: MovieDao
-    val movies: List<Movie>
+    private val dao: MovieDao
+    var movies: List<Movie>
 
     init {
         val db = Room.databaseBuilder(context, AppDatabase::class.java, "movies")
             .allowMainThreadQueries()
             .build()
-        movieDao = db.movieDao()
-        movies = movieDao.getAll()
+        dao = db.movieDao()
+        movies = dao.getAll()
         if (movies.isNotEmpty()) emptyView.visibility = View.GONE
     }
 
@@ -50,9 +51,24 @@ class MoviesAdapter(context: Context, private val emptyView: View) :
     override fun getItemCount() = movies.size
 
     fun add(movie: Movie) {
-        movieDao.add(movie)
+        dao.add(movie)
         (movies as MutableList<Movie>).add(movie)
         notifyItemInserted(movies.size - 1)
         emptyView.visibility = View.GONE
+    }
+
+    fun filter(query: String) {
+        val oldList = movies
+        movies = dao.filter("%$query%")
+        DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+            override fun getOldListSize() = oldList.size
+            override fun getNewListSize() = movies.size
+
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
+                oldList[oldItemPosition].name == movies[newItemPosition].name
+
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
+                oldList[oldItemPosition] == movies[newItemPosition]
+        }).dispatchUpdatesTo(this)
     }
 }

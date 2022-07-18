@@ -18,6 +18,8 @@ import java.time.LocalDate
 import java.time.ZoneOffset
 
 class MainActivity : AppCompatActivity() {
+    lateinit var adapter: MoviesAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -26,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         val recycler = findViewById<RecyclerView>(R.id.recycler)
         val add = findViewById<FloatingActionButton>(R.id.add)
 
-        val adapter = MoviesAdapter(this, emptyView)
+        adapter = MoviesAdapter(this, emptyView)
         recycler.adapter = adapter
         recycler.layoutManager = GridLayoutManager(this, 2)
 
@@ -73,5 +75,19 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.main, menu)
+        val searchView = menu.findItem(R.id.search).actionView as SearchView
+        searchView.maxWidth = Int.MAX_VALUE
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String) = false
+            override fun onQueryTextChange(newText: String): Boolean {
+                adapter.filter(newText)
+                return true
+            }
+        })
+        return true
     }
 }
