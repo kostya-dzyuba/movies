@@ -7,10 +7,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 class MoviesAdapter(context: Context, private val emptyView: View) :
     RecyclerView.Adapter<MoviesAdapter.MovieViewHolder>() {
     class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)
 
         private val name = itemView.findViewById<TextView>(R.id.name)
         private val year = itemView.findViewById<TextView>(R.id.year)
@@ -19,7 +22,7 @@ class MoviesAdapter(context: Context, private val emptyView: View) :
         fun bind(movie: Movie) {
             name.text = movie.name
             year.text = "${movie.year} года производства"
-            date.text = "Просмотрен ${movie.date}"
+            date.text = "Просмотрен ${formatter.format(movie.date)}"
         }
     }
 
