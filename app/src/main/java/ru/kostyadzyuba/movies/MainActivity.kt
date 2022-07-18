@@ -2,16 +2,17 @@ package ru.kostyadzyuba.movies
 
 import android.os.Bundle
 import android.text.InputFilter
+import android.view.Menu
 import android.view.View
 import android.view.WindowManager
 import android.widget.CompoundButton
 import android.widget.DatePicker
+import android.widget.SearchView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Room
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.time.LocalDate
 import java.time.ZoneOffset
@@ -21,18 +22,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val empty = findViewById<TextView>(R.id.empty)
+        val emptyView = findViewById<TextView>(R.id.empty)
         val recycler = findViewById<RecyclerView>(R.id.recycler)
         val add = findViewById<FloatingActionButton>(R.id.add)
 
-        val db = Room.databaseBuilder(this, AppDatabase::class.java, "movies")
-            .allowMainThreadQueries()
-            .build()
-
-        val movieDao = db.movieDao()
-        val movies = movieDao.getAll()
-        if (movies.isNotEmpty()) empty.visibility = View.GONE
-        val adapter = MoviesAdapter(movies)
+        val adapter = MoviesAdapter(this, emptyView)
         recycler.adapter = adapter
         recycler.layoutManager = GridLayoutManager(this, 2)
 
@@ -74,9 +68,7 @@ class MainActivity : AppCompatActivity() {
                     val date = if (todayView.isChecked) today else
                         LocalDate.of(datePicker.year, datePicker.month, datePicker.dayOfMonth)
                     val movie = Movie(name, year, date)
-                    movieDao.add(movie)
                     adapter.add(movie)
-                    empty.visibility = View.GONE
                     dialog.dismiss()
                 }
             }
