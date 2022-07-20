@@ -32,6 +32,10 @@ class MainActivity : AppCompatActivity() {
         recycler.adapter = adapter
         recycler.layoutManager = GridLayoutManager(this, 2)
 
+        val initialTitle = title
+        if (adapter.itemCount > 0)
+            title = "$initialTitle (${adapter.itemCount})"
+
         add.setOnClickListener {
             val today = LocalDate.now()
             val root = layoutInflater.inflate(R.layout.dialog_add, null)
@@ -71,6 +75,7 @@ class MainActivity : AppCompatActivity() {
                         LocalDate.of(datePicker.year, datePicker.month, datePicker.dayOfMonth)
                     val movie = Movie(name, year, date)
                     adapter.add(movie)
+                    title = "$initialTitle (${adapter.itemCount})"
                     dialog.dismiss()
                 }
             }
