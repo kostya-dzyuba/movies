@@ -23,7 +23,7 @@ class MoviesAdapter(context: Context, private val emptyView: View) :
         fun bind(movie: Movie) {
             name.text = movie.name
             year.text = "${movie.year} года производства"
-            date.text = "Просмотрен ${formatter.format(movie.date)}"
+            date.text = "Просмотр ${formatter.format(movie.date)}"
         }
     }
 
