@@ -28,7 +28,7 @@ class MoviesAdapter(context: Context, private val emptyView: View) :
     }
 
     private val dao: MovieDao
-    var movies: List<Movie> private set
+    private var movies: List<Movie>
 
     init {
         val db = Room.databaseBuilder(context, AppDatabase::class.java, "movies")
@@ -78,4 +78,6 @@ class MoviesAdapter(context: Context, private val emptyView: View) :
             if (movies.isEmpty()) View.VISIBLE
             else View.INVISIBLE
     }
+
+    fun has(name: String) = movies.any { it.name == name }
 }
