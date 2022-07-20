@@ -79,5 +79,5 @@ class MoviesAdapter(context: Context, private val emptyView: View) :
             else View.INVISIBLE
     }
 
-    fun has(name: String) = movies.any { it.name == name }
+    fun has(name: String, year: Short) = movies.any { it.name == name && it.year == year }
 }

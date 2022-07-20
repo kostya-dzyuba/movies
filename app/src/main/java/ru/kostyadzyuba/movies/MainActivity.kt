@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {
                 val year = yearView.text.toString().toShortOrNull()
 
                 if (name.isNotBlank() && name.length >= 2 && year != null &&
-                    year in 1900..today.year && !adapter.has(name)
+                    year in 1900..today.year && !adapter.has(name, year)
                 ) {
                     val date = if (noDate.isChecked) null else
                         LocalDate.of(datePicker.year, datePicker.month, datePicker.dayOfMonth)
