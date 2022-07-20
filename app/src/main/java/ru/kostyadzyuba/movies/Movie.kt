@@ -9,5 +9,5 @@ data class Movie(
     @PrimaryKey
     val name: String,
     val year: Short,
-    val date: LocalDate
+    val date: LocalDate?
 )

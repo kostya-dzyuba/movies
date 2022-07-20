@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.time.LocalDate
-import java.time.ZoneOffset
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
     lateinit var adapter: MoviesAdapter
@@ -42,15 +42,14 @@ class MainActivity : AppCompatActivity() {
 
             val nameView = root.findViewById<TextView>(R.id.name)
             val yearView = root.findViewById<TextView>(R.id.year)
-            val todayView = root.findViewById<CompoundButton>(R.id.today)
+            val noDate = root.findViewById<CompoundButton>(R.id.no_date)
             val datePicker = root.findViewById<DatePicker>(R.id.date)
 
             nameView.requestFocus()
             yearView.filters = arrayOf(InputFilter.LengthFilter(4))
-            datePicker.maxDate = today.minusDays(1)
-                .atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()
+            datePicker.maxDate = TimeUnit.DAYS.toMillis(today.toEpochDay())
 
-            todayView.setOnCheckedChangeListener { _, isChecked ->
+            noDate.setOnCheckedChangeListener { _, isChecked ->
                 datePicker.visibility = if (isChecked) View.GONE else View.VISIBLE
             }
 
@@ -71,7 +70,7 @@ class MainActivity : AppCompatActivity() {
                 if (name.isNotBlank() && name.length >= 2 && year != null &&
                     year in 1900..today.year && !adapter.has(name)
                 ) {
-                    val date = if (todayView.isChecked) today else
+                    val date = if (noDate.isChecked) null else
                         LocalDate.of(datePicker.year, datePicker.month, datePicker.dayOfMonth)
                     val movie = Movie(name, year, date)
                     adapter.add(movie)

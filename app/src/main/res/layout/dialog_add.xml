@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -20,18 +19,15 @@
         android:hint="Год производства"
         android:inputType="number" />
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/today"
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/no_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:checked="true"
-        android:text="Фильм просмотрен сегодня" />
+        android:text="Дата просмотра неизвестна" />
 
     <DatePicker
         android:id="@+id/date"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        tools:visibility="visible" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
