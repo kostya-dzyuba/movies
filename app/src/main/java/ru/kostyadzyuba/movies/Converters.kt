@@ -5,8 +5,8 @@ import java.time.LocalDate
 
 class Converters {
     @TypeConverter
-    fun fromEpochDay(epochDay: Short): LocalDate = LocalDate.ofEpochDay(epochDay.toLong())
+    fun fromEpochDay(epochDay: Short?) = epochDay?.let { LocalDate.ofEpochDay(it.toLong()) }
 
     @TypeConverter
-    fun localDateToEpochDay(localDate: LocalDate) = localDate.toEpochDay().toShort()
+    fun localDateToEpochDay(localDate: LocalDate?) = localDate?.toEpochDay()?.toShort()
 }

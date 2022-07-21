@@ -23,7 +23,7 @@ class MoviesAdapter(context: Context, private val emptyView: View) :
         fun bind(movie: Movie) {
             name.text = movie.name
             year.text = "${movie.year} года производства"
-            date.text = "Просмотр ${formatter.format(movie.date)}"
+            movie.date?.let { date.text = "Просмотр ${formatter.format(it)}" }
         }
     }
 
@@ -78,6 +78,4 @@ class MoviesAdapter(context: Context, private val emptyView: View) :
             if (movies.isEmpty()) View.VISIBLE
             else View.INVISIBLE
     }
-
-    fun has(name: String, year: Short) = movies.any { it.name == name && it.year == year }
 }
