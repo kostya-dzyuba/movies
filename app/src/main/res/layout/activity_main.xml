@@ -9,8 +9,9 @@
         android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="8dp"
-        tools:listitem="@android:layout/simple_list_item_2" />
+        android:clipToPadding="false"
+        android:padding="8dp"
+        tools:listitem="@layout/item_movie" />
 
     <TextView
         android:id="@+id/empty"
