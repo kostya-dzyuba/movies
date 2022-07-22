@@ -42,9 +42,9 @@ class AddActivity : AppCompatActivity() {
             val name = nameView.text.toString()
             val year = yearView.text.toString().toShortOrNull()
 
-            if (name.isNotBlank() && name.length >= 2 && year != null && year in 1900..watchDate.year) {
+            if (name.isNotBlank() && name.trim().length >= 2 && year != null && year in 1900..watchDate.year) {
                 val watch = if (noDate.isChecked) null else watchDate
-                val movie = Movie(name, year, watch)
+                val movie = Movie(name.trim(), year, watch)
                 setResult(Activity.RESULT_OK, Intent().putExtra("movie", movie))
                 finish()
             }
