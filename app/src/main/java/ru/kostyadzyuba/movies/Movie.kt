@@ -8,5 +8,5 @@ import java.time.LocalDate
 data class Movie(
     val name: String,
     val year: Short,
-    val date: LocalDate?
+    val watch: LocalDate?
 ) : Serializable
