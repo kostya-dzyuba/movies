@@ -14,4 +14,10 @@ interface MovieDao {
 
     @Insert
     fun add(movie: Movie)
+
+    @Insert
+    fun addAll(movies: List<Movie>)
+
+    @Query("delete from movie")
+    fun clear()
 }

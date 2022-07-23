@@ -1,6 +1,7 @@
 package ru.kostyadzyuba.movies
 
 import android.content.Context
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,10 +9,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
+import com.opencsv.CSVReaderHeaderAware
+import java.io.InputStreamReader
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
-class MoviesAdapter(context: Context, private val emptyView: View) :
+class MoviesAdapter(private val context: Context, private val emptyView: View) :
     RecyclerView.Adapter<MoviesAdapter.MovieViewHolder>() {
     class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)
@@ -64,22 +68,24 @@ class MoviesAdapter(context: Context, private val emptyView: View) :
     }
 
     fun filter(query: String) {
+        diff(dao.filter("%$query%"))
+    }
+
+    fun import(uri: Uri) {
+        val stream = context.contentResolver.openInputStream(uri)
+        val reader = CSVReaderHeaderAware(InputStreamReader(stream))
+        val imported = reader.map { Movie(it[0], it[1].toShort(), LocalDate.parse(it[2])) }
+        dao.clear()
+        dao.addAll(imported)
+        diff(dao.getAll())
+    }
+
+    private fun diff(new: List<Movie>) {
         val old = movies
-        movies = dao.filter("%$query%")
-
-        DiffUtil.calculateDiff(object : DiffUtil.Callback() {
-            override fun getOldListSize() = old.size
-            override fun getNewListSize() = movies.size
-
-            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-                old[oldItemPosition].name == movies[newItemPosition].name
-
-            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-                old[oldItemPosition] == movies[newItemPosition]
-        }).dispatchUpdatesTo(this)
-
+        movies = new
+        DiffUtil.calculateDiff(MoviesDiff(old, new)).dispatchUpdatesTo(this)
         emptyView.visibility =
-            if (movies.isEmpty()) View.VISIBLE
+            if (new.isEmpty()) View.VISIBLE
             else View.INVISIBLE
     }
 }
