@@ -32,7 +32,7 @@
             android:text="Дата просмотра неизвестна" />
 
         <CalendarView
-            android:id="@+id/date"
+            android:id="@+id/watch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>

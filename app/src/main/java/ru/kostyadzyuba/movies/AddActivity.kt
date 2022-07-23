@@ -22,7 +22,7 @@ class AddActivity : AppCompatActivity() {
         val nameView = findViewById<TextView>(R.id.name)
         val yearView = findViewById<TextView>(R.id.year)
         val noDate = findViewById<CompoundButton>(R.id.no_date)
-        val calendar = findViewById<CalendarView>(R.id.date)
+        val calendar = findViewById<CalendarView>(R.id.watch)
         val done = findViewById<View>(R.id.done)
 
         window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)

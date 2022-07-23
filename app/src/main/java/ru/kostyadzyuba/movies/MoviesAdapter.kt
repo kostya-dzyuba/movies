@@ -18,12 +18,16 @@ class MoviesAdapter(context: Context, private val emptyView: View) :
 
         private val name = itemView.findViewById<TextView>(R.id.name)
         private val year = itemView.findViewById<TextView>(R.id.year)
-        private val date = itemView.findViewById<TextView>(R.id.date)
+        private val watch = itemView.findViewById<TextView>(R.id.watch)
 
         fun bind(movie: Movie) {
             name.text = movie.name
             year.text = "${movie.year} года производства"
-            movie.watch?.let { date.text = "Просмотр ${formatter.format(it)}" }
+
+            watch.visibility = movie.watch?.let {
+                watch.text = "Просмотр ${formatter.format(movie.watch)}"
+                View.VISIBLE
+            } ?: View.GONE
         }
     }
 

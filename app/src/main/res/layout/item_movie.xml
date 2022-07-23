@@ -21,7 +21,7 @@
         tools:text="Год производства: 2022" />
 
     <TextView
-        android:id="@+id/date"
+        android:id="@+id/watch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?textAppearanceListItemSecondary"
