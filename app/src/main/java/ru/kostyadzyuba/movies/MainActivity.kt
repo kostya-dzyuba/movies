@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         recycler.layoutManager = GridLayoutManager(this, 2)
 
         if (adapter.itemCount > 0)
-            title = "$initialTitle (${adapter.itemCount})"
+            updateTitle()
 
         add.setOnClickListener {
             startActivityForResult(Intent(this, AddActivity::class.java), REQUEST_ADD)
@@ -59,9 +59,12 @@ class MainActivity : AppCompatActivity() {
                 REQUEST_ADD -> {
                     val movie = data!!.getSerializableExtra("movie")
                     adapter.add(movie as Movie)
-                    title = "$initialTitle (${adapter.itemCount})"
+                    updateTitle()
                 }
-                REQUEST_IMPORT -> adapter.import(data!!.data!!)
+                REQUEST_IMPORT -> {
+                    adapter.import(data!!.data!!)
+                    updateTitle()
+                }
                 else -> throw IllegalArgumentException("requestCode")
             }
         }
@@ -79,6 +82,10 @@ class MainActivity : AppCompatActivity() {
             .setNegativeButton(android.R.string.cancel, null)
             .show()
         return true
+    }
+
+    private fun updateTitle() {
+        title = "$initialTitle (${adapter.itemCount})"
     }
 
     companion object {
