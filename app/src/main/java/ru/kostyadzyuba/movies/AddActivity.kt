@@ -21,6 +21,7 @@ class AddActivity : AppCompatActivity() {
 
         val nameView = findViewById<TextView>(R.id.name)
         val yearView = findViewById<TextView>(R.id.year)
+        val series = findViewById<CompoundButton>(R.id.series)
         val noDate = findViewById<CompoundButton>(R.id.no_date)
         val calendar = findViewById<CalendarView>(R.id.watch)
         val done = findViewById<View>(R.id.done)
@@ -29,6 +30,12 @@ class AddActivity : AppCompatActivity() {
         nameView.requestFocus()
         yearView.filters = arrayOf(InputFilter.LengthFilter(4))
         calendar.maxDate = TimeUnit.DAYS.toMillis(watchDate.toEpochDay())
+
+        series.setOnCheckedChangeListener { _, isChecked ->
+            nameView.hint = "Название ${if (isChecked) "сериала" else "фильма"}"
+        }
+
+        series.isChecked = intent.extras!!.getBoolean("series")
 
         noDate.setOnCheckedChangeListener { _, isChecked ->
             calendar.visibility = if (isChecked) View.GONE else View.VISIBLE
