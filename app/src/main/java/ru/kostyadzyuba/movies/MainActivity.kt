@@ -3,6 +3,7 @@ package ru.kostyadzyuba.movies
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.tabs.TabLayout
 
 class MainActivity : AppCompatActivity() {
     lateinit var adapter: MoviesAdapter
@@ -21,9 +23,19 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         initialTitle = title
 
+        val tabs = findViewById<TabLayout>(R.id.tabs)
         val emptyView = findViewById<View>(R.id.empty)
         val recycler = findViewById<RecyclerView>(R.id.recycler)
         val add = findViewById<View>(R.id.add)
+
+        tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                Log.d(TAG, "onTabSelected: ${tab.position}")
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab) {}
+            override fun onTabReselected(tab: TabLayout.Tab) {}
+        })
 
         adapter = MoviesAdapter(this, emptyView)
         recycler.adapter = adapter
@@ -89,6 +101,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
+        private const val TAG = "MainActivity"
+
         const val REQUEST_ADD = 0
         const val REQUEST_IMPORT = 1
     }
