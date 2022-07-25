@@ -76,7 +76,7 @@ class MoviesAdapter(private val context: Context, private val emptyView: View) :
         val reader = CSVReaderHeaderAware(InputStreamReader(stream))
         val imported = reader.map {
             val watch = if (it[2] == "NULL") null else LocalDate.parse(it[2])
-            Movie(it[0], it[1].toShort(), watch)
+            Movie(it[0], it[1].toShort(), watch, it[3].toInt() == 1)
         }
         dao.clear()
         dao.addAll(imported)
