@@ -3,7 +3,6 @@ package ru.kostyadzyuba.movies
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -30,7 +29,8 @@ class MainActivity : AppCompatActivity() {
 
         tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                Log.d(TAG, "onTabSelected: ${tab.position}")
+                adapter.showSeries(tab.position == 1)
+                updateTitle()
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {}
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         recycler.adapter = adapter
         recycler.layoutManager = GridLayoutManager(this, 2)
 
-        if (adapter.itemCount > 0)
+        if (adapter.count > 0)
             updateTitle()
 
         add.setOnClickListener {
@@ -100,12 +100,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateTitle() {
-        title = "$initialTitle (${adapter.itemCount})"
+        title = "$initialTitle (${adapter.count})"
     }
 
     companion object {
-        private const val TAG = "MainActivity"
-
         const val REQUEST_ADD = 0
         const val REQUEST_IMPORT = 1
     }

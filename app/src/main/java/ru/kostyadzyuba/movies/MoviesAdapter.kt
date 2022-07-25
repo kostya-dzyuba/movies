@@ -37,13 +37,15 @@ class MoviesAdapter(private val context: Context, private val emptyView: View) :
 
     private val dao: MovieDao
     private var movies: List<Movie>
+    private var seriesShown: Boolean = false
+    val count get() = dao.count()
 
     init {
         val db = Room.databaseBuilder(context, AppDatabase::class.java, "movies")
             .allowMainThreadQueries()
             .build()
         dao = db.movieDao()
-        movies = dao.getAll()
+        movies = dao.getSeries(false)
 
         if (movies.isEmpty())
             emptyView.visibility = View.VISIBLE
@@ -80,7 +82,12 @@ class MoviesAdapter(private val context: Context, private val emptyView: View) :
         }
         dao.clear()
         dao.addAll(imported)
-        diff(dao.getAll())
+        diff(dao.getSeries(seriesShown))
+    }
+
+    fun showSeries(showSeries: Boolean) {
+        seriesShown = showSeries
+        diff(dao.getSeries(showSeries))
     }
 
     private fun diff(new: List<Movie>) {

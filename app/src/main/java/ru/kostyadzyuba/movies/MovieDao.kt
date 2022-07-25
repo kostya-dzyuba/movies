@@ -12,6 +12,12 @@ interface MovieDao {
     @Query("select * from movie where name like :name order by watch desc, year desc, name")
     fun filter(name: String): List<Movie>
 
+    @Query("select * from movie where series = :value order by watch desc, year desc, name")
+    fun getSeries(value: Boolean): List<Movie>
+
+    @Query("select count(*) from movie")
+    fun count(): Int
+
     @Insert
     fun add(movie: Movie)
 
