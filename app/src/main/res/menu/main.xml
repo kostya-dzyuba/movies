@@ -7,11 +7,13 @@
         android:icon="@drawable/ic_baseline_search_24"
         android:title="Поиск"
         app:actionViewClass="android.widget.SearchView"
+        app:iconTint="?colorOnPrimary"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/_import"
         android:icon="@drawable/ic_baseline_import_export_24"
         android:title="Импорт"
+        app:iconTint="?colorOnPrimary"
         app:showAsAction="ifRoom" />
 </menu>
