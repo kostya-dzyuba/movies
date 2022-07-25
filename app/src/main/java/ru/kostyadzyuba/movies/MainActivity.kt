@@ -45,7 +45,10 @@ class MainActivity : AppCompatActivity() {
             updateTitle()
 
         add.setOnClickListener {
-            startActivityForResult(Intent(this, AddActivity::class.java), REQUEST_ADD)
+            startActivityForResult(
+                Intent(this, AddActivity::class.java)
+                    .putExtra("series", tabs.selectedTabPosition == 1), REQUEST_ADD
+            )
         }
     }
 
