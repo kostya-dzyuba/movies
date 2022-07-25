@@ -41,9 +41,7 @@ class MainActivity : AppCompatActivity() {
         adapter = MoviesAdapter(this, emptyView)
         recycler.adapter = adapter
         recycler.layoutManager = GridLayoutManager(this, 2)
-
-        if (adapter.count > 0)
-            updateTitle()
+        updateTitle()
 
         add.setOnClickListener {
             startActivityForResult(
@@ -110,7 +108,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateTitle() {
-        title = "$initialTitle (${adapter.count})"
+        if (adapter.count > 0)
+            title = "$initialTitle (${adapter.count})"
     }
 
     companion object {
