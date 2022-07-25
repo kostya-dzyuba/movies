@@ -26,6 +26,12 @@
             android:inputType="number" />
 
         <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/series"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Сериал" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/no_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
