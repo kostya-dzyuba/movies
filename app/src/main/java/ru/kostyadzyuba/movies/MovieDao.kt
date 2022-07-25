@@ -6,16 +6,16 @@ import androidx.room.Query
 
 @Dao
 interface MovieDao {
-    @Query("select * from movie order by watch desc, year desc, name")
+    @Query("select * from OrderedMovie")
     fun getAll(): List<Movie>
 
-    @Query("select * from movie where name like :name order by watch desc, year desc, name")
+    @Query("select * from OrderedMovie where name like :name")
     fun filter(name: String): List<Movie>
 
-    @Query("select * from movie where series = :value order by watch desc, year desc, name")
+    @Query("select * from OrderedMovie where series = :value")
     fun getSeries(value: Boolean): List<Movie>
 
-    @Query("select count(*) from movie")
+    @Query("select count(*) from Movie")
     fun count(): Int
 
     @Insert
@@ -24,6 +24,6 @@ interface MovieDao {
     @Insert
     fun addAll(movies: List<Movie>)
 
-    @Query("delete from movie")
+    @Query("delete from Movie")
     fun clear()
 }
