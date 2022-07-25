@@ -16,13 +16,14 @@ import com.google.android.material.tabs.TabLayout
 class MainActivity : AppCompatActivity() {
     lateinit var adapter: MoviesAdapter
     private lateinit var initialTitle: CharSequence
+    private lateinit var tabs: TabLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initialTitle = title
 
-        val tabs = findViewById<TabLayout>(R.id.tabs)
+        tabs = findViewById(R.id.tabs)
         val emptyView = findViewById<View>(R.id.empty)
         val recycler = findViewById<RecyclerView>(R.id.recycler)
         val add = findViewById<View>(R.id.add)
@@ -57,6 +58,15 @@ class MainActivity : AppCompatActivity() {
         val searchView = menu.findItem(R.id.search).actionView as SearchView
         searchView.queryHint = "Введите название фильма"
         searchView.maxWidth = Int.MAX_VALUE
+        searchView.setOnSearchClickListener {
+            tabs.visibility = View.GONE
+            adapter.showSeries(null)
+        }
+        searchView.setOnCloseListener {
+            tabs.visibility = View.VISIBLE
+            adapter.showSeries(tabs.selectedTabPosition == 1)
+            false
+        }
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String) = false
             override fun onQueryTextChange(newText: String): Boolean {

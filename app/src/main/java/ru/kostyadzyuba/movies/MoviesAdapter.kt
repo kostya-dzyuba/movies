@@ -37,7 +37,7 @@ class MoviesAdapter(private val context: Context, private val emptyView: View) :
 
     private val dao: MovieDao
     private var movies: List<Movie>
-    private var seriesShown: Boolean = false
+    private var seriesShown: Boolean? = false
     val count get() = dao.count()
 
     init {
@@ -82,12 +82,12 @@ class MoviesAdapter(private val context: Context, private val emptyView: View) :
         }
         dao.clear()
         dao.addAll(imported)
-        diff(dao.getSeries(seriesShown))
+        diff(dao.getSeries(seriesShown!!))
     }
 
-    fun showSeries(showSeries: Boolean) {
+    fun showSeries(showSeries: Boolean?) {
         seriesShown = showSeries
-        diff(dao.getSeries(showSeries))
+        diff(showSeries?.let { dao.getSeries(it) } ?: dao.getAll())
     }
 
     private fun diff(new: List<Movie>) {
