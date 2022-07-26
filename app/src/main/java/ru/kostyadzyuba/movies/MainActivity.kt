@@ -1,19 +1,26 @@
 package ru.kostyadzyuba.movies
 
 import android.app.Activity
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.WindowManager
+import android.widget.Button
+import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.SearchView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), DialogInterface.OnClickListener {
     lateinit var adapter: MoviesAdapter
     private lateinit var initialTitle: CharSequence
     private lateinit var tabs: TabLayout
@@ -94,17 +101,36 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        AlertDialog.Builder(this)
-            .setTitle("Внимание!")
-            .setMessage("Список просмотренных фильмов будет очищен. Продолжить?")
-            .setPositiveButton(android.R.string.ok) { _, _ ->
-                val intent = Intent(Intent.ACTION_GET_CONTENT)
-                intent.type = "text/*"
-                startActivityForResult(intent, REQUEST_IMPORT)
-            }
-            .setNegativeButton(android.R.string.cancel, null)
-            .show()
+        if (adapter.count == 0) onClick(null, 0) else {
+            val layout = FrameLayout(this)
+            val margin = resources.getDimensionPixelSize(R.dimen.dialog_margin)
+            val editText = EditText(this)
+            lateinit var positive: Button
+            layout.setPadding(margin, 0, margin, 0)
+            editText.inputType = InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+            editText.hint = "Я согласен"
+            editText.requestFocus()
+            editText.doAfterTextChanged { positive.isEnabled = it.toString() == editText.hint }
+            layout.addView(editText)
+            val dialog = AlertDialog.Builder(this)
+                .setTitle("Внимание!")
+                .setMessage("Список просмотренных фильмов будет очищен. Для продолжения введите: \"Я согласен\"")
+                .setView(layout)
+                .setPositiveButton(android.R.string.ok, this)
+                .setNegativeButton(android.R.string.cancel, null)
+                .create()
+            dialog.show()
+            dialog.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+            positive = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+            positive.isEnabled = false
+        }
         return true
+    }
+
+    override fun onClick(dialog: DialogInterface?, which: Int) {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "text/*"
+        startActivityForResult(intent, REQUEST_IMPORT)
     }
 
     private fun updateTitle() {

@@ -6,11 +6,16 @@
         <entry key="../../Library/Android/sdk/platforms/android-32/data/res/layout/simple_list_item_1.xml" value="0.3098958333333333" />
         <entry key="../../Library/Android/sdk/platforms/android-32/data/res/layout/simple_list_item_2.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.151" />
+        <entry key="app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.1635" />
+        <entry key="app/src/main/res/drawable/ic_baseline_done_24.xml" value="0.164" />
+        <entry key="app/src/main/res/drawable/ic_baseline_import_export_24.xml" value="0.164" />
+        <entry key="app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.164" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.151" />
         <entry key="app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.151" />
         <entry key="app/src/main/res/layout/activity_add.xml" value="0.2543822146216332" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2391102873030584" />
         <entry key="app/src/main/res/layout/dialog_add.xml" value="0.2543822146216332" />
+        <entry key="app/src/main/res/layout/dialog_import.xml" value="0.2543822146216332" />
         <entry key="app/src/main/res/layout/item_movie.xml" value="0.6514522821576764" />
         <entry key="app/src/main/res/menu/main.xml" value="0.25116082735331363" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.151" />
