@@ -29,11 +29,6 @@ class EditActivity : AppCompatActivity() {
         val calendar = findViewById<CalendarView>(R.id.watch)
         val done = findViewById<View>(R.id.done)
 
-        window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
-        nameView.requestFocus()
-        yearView.filters = arrayOf(InputFilter.LengthFilter(4))
-        calendar.maxDate = TimeUnit.DAYS.toMillis(watchDate.toEpochDay())
-
         series.setOnCheckedChangeListener { _, isChecked ->
             nameView.hint = "Название ${if (isChecked) "сериала" else "фильма"}"
         }
@@ -61,6 +56,7 @@ class EditActivity : AppCompatActivity() {
             }
         }
 
+        calendar.maxDate = TimeUnit.DAYS.toMillis(watchDate.toEpochDay())
         val extras = intent.extras!!
         val movie = extras.getSerializable("movie") as Movie?
         series.isChecked = movie?.let {
@@ -73,6 +69,10 @@ class EditActivity : AppCompatActivity() {
                 calendar.date = TimeUnit.DAYS.toMillis(it.toEpochDay())
             } ?: run { noDate.isChecked = true }
             it.series
-        } ?: extras.getBoolean("series")
+        } ?: run {
+            nameView.requestFocus()
+            window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+            extras.getBoolean("series")
+        }
     }
 }
