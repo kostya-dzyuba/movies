@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.InputFilter
+import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import android.widget.CalendarView
@@ -17,6 +17,7 @@ class EditActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         var watchDate = LocalDate.now()
         var oldName: String? = null
@@ -74,5 +75,10 @@ class EditActivity : AppCompatActivity() {
             window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
             extras.getBoolean("series")
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        finish()
+        return true
     }
 }
