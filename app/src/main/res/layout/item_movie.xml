@@ -1,31 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    android:orientation="vertical">
+    android:layout_margin="4dp"
+    android:foreground="?selectableItemBackground"
+    app:cardCornerRadius="16dp">
 
-    <TextView
-        android:id="@+id/name"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?textAppearanceListItem"
-        tools:text="Название фильма" />
+        android:layout_margin="6dp"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/year"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?textAppearanceListItemSecondary"
-        tools:text="Год производства: 2022" />
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?textAppearanceListItem"
+            tools:text="Название фильма" />
 
-    <TextView
-        android:id="@+id/watch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?textAppearanceListItemSecondary"
-        android:textSize="12sp"
-        tools:text="Просмотрен 12.07.2022" />
+        <TextView
+            android:id="@+id/year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?textAppearanceListItemSecondary"
+            tools:text="Год производства: 2022" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/watch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?textAppearanceListItemSecondary"
+            android:textSize="12sp"
+            tools:text="Просмотрен 12.07.2022" />
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
