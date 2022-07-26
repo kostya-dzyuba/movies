@@ -15,11 +15,13 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
-class MoviesAdapter(private val context: Context, private val emptyView: View) :
+class MoviesAdapter(
+    private val context: Context,
+    private val emptyView: View,
+    private val onClick: (Movie) -> Unit
+) :
     RecyclerView.Adapter<MoviesAdapter.MovieViewHolder>() {
-    class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)
-
+    inner class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val name = itemView.findViewById<TextView>(R.id.name)
         private val year = itemView.findViewById<TextView>(R.id.year)
         private val watch = itemView.findViewById<TextView>(R.id.watch)
@@ -32,12 +34,16 @@ class MoviesAdapter(private val context: Context, private val emptyView: View) :
                 watch.text = "Просмотр ${formatter.format(movie.watch)}"
                 View.VISIBLE
             } ?: View.GONE
+
+            itemView.setOnClickListener { onClick(movie) }
         }
     }
 
     private val dao: MovieDao
     private var movies: List<Movie>
     private var seriesShown: Boolean? = false
+    private val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)
+    private var query: String = "%"
 
     init {
         val db = Room.databaseBuilder(context, AppDatabase::class.java, "movies")
@@ -69,7 +75,8 @@ class MoviesAdapter(private val context: Context, private val emptyView: View) :
     }
 
     fun filter(query: String) {
-        diff(dao.filter("%$query%"))
+        this.query = "%$query%"
+        diff(dao.filter(this.query))
     }
 
     fun import(uri: Uri) {
@@ -90,6 +97,11 @@ class MoviesAdapter(private val context: Context, private val emptyView: View) :
     }
 
     fun getCount(series: Boolean? = null) = series?.let { dao.count(it) } ?: dao.count()
+
+    fun edit(oldName: String, oldYear: Short, movie: Movie) {
+        dao.edit(oldName, oldYear, movie.name, movie.year, movie.watch, movie.series)
+        diff(seriesShown?.let { dao.filter(query, it) } ?: dao.filter(query))
+    }
 
     private fun diff(new: List<Movie>) {
         val old = movies

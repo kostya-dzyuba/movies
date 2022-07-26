@@ -49,17 +49,22 @@ class MainActivity : AppCompatActivity(), DialogInterface.OnClickListener {
             override fun onTabReselected(tab: TabLayout.Tab) {}
         })
 
-        adapter = MoviesAdapter(this, emptyView)
-        recycler.adapter = adapter
-        recycler.layoutManager = GridLayoutManager(this, 2)
-        updateCount()
-
         add.setOnClickListener {
             startActivityForResult(
-                Intent(this, AddActivity::class.java)
+                Intent(this, EditActivity::class.java)
                     .putExtra("series", tabs.selectedTabPosition == 1), REQUEST_ADD
             )
         }
+
+        adapter = MoviesAdapter(this, emptyView) {
+            val intent = Intent(this, EditActivity::class.java)
+                .putExtra("movie", it)
+            startActivityForResult(intent, REQUEST_EDIT)
+        }
+
+        recycler.adapter = adapter
+        recycler.layoutManager = GridLayoutManager(this, 2)
+        updateCount()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -93,14 +98,17 @@ class MainActivity : AppCompatActivity(), DialogInterface.OnClickListener {
                 REQUEST_ADD -> {
                     val movie = data!!.getSerializableExtra("movie")
                     adapter.add(movie as Movie)
-                    updateCount()
                 }
-                REQUEST_IMPORT -> {
-                    adapter.import(data!!.data!!)
-                    updateCount()
+                REQUEST_EDIT -> {
+                    val oldName = data!!.getStringExtra("name")!!
+                    val oldYear = data.getShortExtra("year", 0)
+                    val movie = data.getSerializableExtra("movie") as Movie
+                    adapter.edit(oldName, oldYear, movie)
                 }
+                REQUEST_IMPORT -> adapter.import(data!!.data!!)
                 else -> throw IllegalArgumentException("requestCode")
             }
+            updateCount()
         }
     }
 
@@ -147,6 +155,7 @@ class MainActivity : AppCompatActivity(), DialogInterface.OnClickListener {
 
     companion object {
         const val REQUEST_ADD = 0
-        const val REQUEST_IMPORT = 1
+        const val REQUEST_EDIT = 1
+        const val REQUEST_IMPORT = 2
     }
 }
