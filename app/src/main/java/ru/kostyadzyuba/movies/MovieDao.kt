@@ -18,6 +18,9 @@ interface MovieDao {
     @Query("select count(*) from Movie")
     fun count(): Int
 
+    @Query("select count(*) from Movie where series = :series")
+    fun count(series: Boolean): Int
+
     @Insert
     fun add(movie: Movie)
 

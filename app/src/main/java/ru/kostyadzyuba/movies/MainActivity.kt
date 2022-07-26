@@ -21,24 +21,28 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 
 class MainActivity : AppCompatActivity(), DialogInterface.OnClickListener {
-    lateinit var adapter: MoviesAdapter
-    private lateinit var initialTitle: CharSequence
+    private lateinit var adapter: MoviesAdapter
     private lateinit var tabs: TabLayout
+
+    private lateinit var moviesTab: TabLayout.Tab
+    private lateinit var seriesTab: TabLayout.Tab
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        initialTitle = title
 
         tabs = findViewById(R.id.tabs)
         val emptyView = findViewById<View>(R.id.empty)
         val recycler = findViewById<RecyclerView>(R.id.recycler)
         val add = findViewById<View>(R.id.add)
 
+        moviesTab = tabs.getTabAt(0)!!
+        seriesTab = tabs.getTabAt(1)!!
+
         tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 adapter.showSeries(tab.position == 1)
-                updateTitle()
+                updateCount()
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {}
@@ -48,7 +52,7 @@ class MainActivity : AppCompatActivity(), DialogInterface.OnClickListener {
         adapter = MoviesAdapter(this, emptyView)
         recycler.adapter = adapter
         recycler.layoutManager = GridLayoutManager(this, 2)
-        updateTitle()
+        updateCount()
 
         add.setOnClickListener {
             startActivityForResult(
@@ -89,11 +93,11 @@ class MainActivity : AppCompatActivity(), DialogInterface.OnClickListener {
                 REQUEST_ADD -> {
                     val movie = data!!.getSerializableExtra("movie")
                     adapter.add(movie as Movie)
-                    updateTitle()
+                    updateCount()
                 }
                 REQUEST_IMPORT -> {
                     adapter.import(data!!.data!!)
-                    updateTitle()
+                    updateCount()
                 }
                 else -> throw IllegalArgumentException("requestCode")
             }
@@ -101,7 +105,7 @@ class MainActivity : AppCompatActivity(), DialogInterface.OnClickListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (adapter.count == 0) onClick(null, 0) else {
+        if (adapter.getCount() == 0) onClick(null, 0) else {
             val layout = FrameLayout(this)
             val margin = resources.getDimensionPixelSize(R.dimen.dialog_margin)
             val editText = EditText(this)
@@ -133,9 +137,12 @@ class MainActivity : AppCompatActivity(), DialogInterface.OnClickListener {
         startActivityForResult(intent, REQUEST_IMPORT)
     }
 
-    private fun updateTitle() {
-        if (adapter.count > 0)
-            title = "$initialTitle (${adapter.count})"
+    private fun updateCount() {
+        if (adapter.getCount() > 0) {
+            title = "Фильмы (${adapter.getCount()})"
+            moviesTab.text = "Фильмы (${adapter.getCount(false)})"
+            seriesTab.text = "Сериалы (${adapter.getCount(true)})"
+        }
     }
 
     companion object {

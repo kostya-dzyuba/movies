@@ -38,7 +38,6 @@ class MoviesAdapter(private val context: Context, private val emptyView: View) :
     private val dao: MovieDao
     private var movies: List<Movie>
     private var seriesShown: Boolean? = false
-    val count get() = dao.count()
 
     init {
         val db = Room.databaseBuilder(context, AppDatabase::class.java, "movies")
@@ -89,6 +88,8 @@ class MoviesAdapter(private val context: Context, private val emptyView: View) :
         seriesShown = showSeries
         diff(showSeries?.let { dao.getSeries(it) } ?: dao.getAll())
     }
+
+    fun getCount(series: Boolean? = null) = series?.let { dao.count(it) } ?: dao.count()
 
     private fun diff(new: List<Movie>) {
         val old = movies
